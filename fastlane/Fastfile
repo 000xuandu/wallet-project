@@ -1,0 +1,58 @@
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+fastlane_require 'dotenv'
+
+# Variables
+build_version = 1;
+android_version_name = '';
+ios_version_name = '';
+
+before_all do |lane, options|
+  Dotenv.load(".env.#{ENV['ENV']}")
+  package = load_json(json_path: "package.json")
+  android_version_name = package["android-version"]
+  ios_version_name = package["ios-version"]
+  build_version = Time.now.to_i.to_s
+end
+
+platform :android do
+  desc "Runs android's lane'"
+  lane :update_config do
+    update_android_strings(
+      block: lambda { |strings|
+        strings['app_name'] = ENV['APP_NAME']
+      }
+    )
+    android_set_version_code(
+      version_code: build_version,
+      gradle_file: "android/app/build.gradle"
+    )
+    android_set_version_name(
+      version_name: android_version_name,
+      gradle_file: "android/app/build.gradle"
+    )
+  end
+end
+
+platform :ios do
+  desc "Runs ios's lane"
+  lane :update_config do
+    xcodeproj = "ios/#{ENV['IOS_PROJECT_NAME']}.xcodeproj"
+    plist_path = "#{ENV['IOS_PROJECT_NAME']}/Info.plist"
+    update_app_identifier(
+      xcodeproj: xcodeproj,
+      plist_path: plist_path,
+      app_identifier: ENV['APP_IDENTIFIER']
+    )
+    update_info_plist(
+      xcodeproj: xcodeproj,
+      plist_path: plist_path,
+      block: lambda { |plist|
+        plist['CFBundleName'] = ENV['APP_NAME']
+        plist['CFBundleDisplayName'] = ENV['APP_NAME']
+        plist['CFBundleShortVersionString'] = ios_version_name
+        plist['CFBundleVersion'] = build_version
+      },
+    )
+  end
+end

@@ -58,3 +58,5 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+fastlane/report.xml
+Gemfile.lock

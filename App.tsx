@@ -27,6 +27,8 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { CustomIcon } from './src/components';
 
 const Section: React.FC<{
   title: string;
@@ -66,6 +68,7 @@ const App = () => {
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+      <CustomIcon name="Barcode" size={30} />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>

@@ -135,7 +135,7 @@ android {
         applicationId "com.walletproject"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1640849498
+        versionCode 1641269658
         versionName "1.0.0"
     }
     splits {
